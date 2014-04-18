@@ -8,9 +8,15 @@ to do:
 * perhaps a dictionary for at least sprint vs mvf language
 
 */
+var config = {
+    "jiraHost":"http://jira",
+    "imgPath":"https://nuttzy.github.io/content/images/",
+    "rapidBoardUrl" : "/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=RAPIDID&jsonp-callback=?",
+    "burndownUrl"   : "/rest/greenhopper/1.0/rapid/charts/scopechangeburndownchart.json?rapidViewId=RAPIDID&sprintId=SPRINTID&jsonp-callback=?"
+}
 
 function getActiveMvfStats( divId, rapidboardId) {
-    $("#" + divId).html('<img src="ajax-loader.gif"> Fetching stats from Jira...');
+    $("#" + divId).html('<img src="' + config.imgPath + 'ajax-loader.gif"> Fetching stats from Jira...');
     $.getJSON(getUrl('rapidBoard', rapidboardId), function(results) {
         processRapidboardData(results, divId, rapidboardId)
     });
@@ -18,7 +24,7 @@ function getActiveMvfStats( divId, rapidboardId) {
 
 // NOTE: the sprintId can be gotten simply by looking in the URL of the burndown chart
 function getCompletedMvfStats( divId, rapidboardId, sprintId) {
-    $("#" + divId).html('<img src="ajax-loader.gif"> Fetching stats from Jira...');
+    $("#" + divId).html('<img src="' + config.imgPath + 'ajax-loader.gif"> Fetching stats from Jira...');
     $.getJSON(getUrl('burndownUrl', rapidboardId, sprintId), function(results) {
         var startDate = moment(results.startTime).format('20YY-MM-DD');
         var targetDate = moment(results.completeTime).format('20YY-MM-DD');
@@ -32,19 +38,13 @@ function getCompletedMvfStats( divId, rapidboardId, sprintId) {
 }
 
 function getUrl(urlType, rapidboardId, sprintId) {
-    var doItLive = true ;
-    var rapidBoardUrl = "rapid_json.html" ;
-    var burndownUrl = "mvf199_burndown.html" ;
-    if (doItLive) {
-        rapidBoardUrl   = "http://jira/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + rapidboardId + "&jsonp-callback=?" ;
-        burndownUrl     = "http://jira/rest/greenhopper/1.0/rapid/charts/scopechangeburndownchart.json?rapidViewId=" + rapidboardId + "&sprintId=" + sprintId + "&jsonp-callback=?" ;
-    }    
-    
+    var url = config.burndownUrl;
     if (urlType == 'rapidBoard') {
-        return rapidBoardUrl ;
-    } else {
-        return burndownUrl ;
+         url = config.rapidBoardUrl ;
     }
+    url = url.replace("RAPIDID", rapidboardId) ;
+    url = url.replace("SPRINTID", sprintId) ;
+    return config.jiraHost + url ;
 }
 
 function getHeaderHtml() {
@@ -63,22 +63,22 @@ function getProgressBarHtml(sprintId) {
         <div class="UdwColumnProgressContainer"> \
             <ul class="UdwColumnProgress"> \
                 <li class="UdwProgress AnalysisComplete" style="width:25%"> \
-                    <a title="Analysis Complete" href="http://jira/issues/?jql=status%20in%20%28%22Reopened%22%2C%22Open%22%29%20AND%20Sprint%20%3D%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
+                    <a title="Analysis Complete" href="' + config.jiraHost + '/issues/?jql=status%20in%20%28%22Reopened%22%2C%22Open%22%29%20AND%20Sprint%20%3D%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
                         <b>0</b> \
                     </a> \
                 </li> \
                 <li class="UdwProgress Implementation" style="width:25%"> \
-                    <a title="Implementation" href="http://jira/issues/?jql=status%20in%20%28%22Implementation%20Parking%20Lot%22%2C%22In%20Progress%22%29%20AND%20Sprint%20%3D%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
+                    <a title="Implementation" href="' + config.jiraHost + '/issues/?jql=status%20in%20%28%22Implementation%20Parking%20Lot%22%2C%22In%20Progress%22%29%20AND%20Sprint%20%3D%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
                         <b>0</b> \
                     </a> \
                 </li> \
                 <li class="UdwProgress Verification" style="width:25%"> \
-                    <a title="Verification" href="http://jira/issues/?jql=status%20in%20%28%22Verification%20Parking%20Lot%22%2C%22Verification%22%29%20AND%20Sprint%20%3D%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
+                    <a title="Verification" href="' + config.jiraHost + '/issues/?jql=status%20in%20%28%22Verification%20Parking%20Lot%22%2C%22Verification%22%29%20AND%20Sprint%20%3D%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
                         <b>0</b> \
                     </a> \
                 </li> \
                 <li class="UdwProgress ReleaseReady" style="width:25%; text-align:bottom;"> \
-                    <a title="Release Ready" href="http://jira/secure/IssueNavigator.jspa?reset=true&jqlQuery=status%20in%20(%22Closed%22,%22Resolved%22)%20AND%20Sprint%20=%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
+                    <a title="Release Ready" href="' + config.jiraHost + '/secure/IssueNavigator.jspa?reset=true&jqlQuery=status%20in%20(%22Closed%22,%22Resolved%22)%20AND%20Sprint%20=%20' + sprintId + '" target="_blank" class="UdwProgressStatusInfo"> \
                         <b>0</b> \
                     </a> \
                 </li> \
@@ -100,12 +100,12 @@ function getActiveFooterHtml(rapidboardId, startDate, targetDate) {
                     <div class="UdwPercentLabel">Work Complete</div> \
                 </div> \
                 <div class="PercentContainer ScopeChange"> \
-                    <div class="UdwPercentValue"><img src="ajax-loader.gif"></div> \
+                    <div class="UdwPercentValue"><img src="' + config.imgPath + 'ajax-loader.gif"></div> \
                     <div class="UdwPercentLabel">Scope Change</div> \
                 </div> \
             </div> \
             <div class="UdwNavContainer"> \
-                <div><a target="_blank" href="http://jira/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '">Kanban</a> | <a target="_blank" href="http://jira/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="http://jira/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="javascript:alert(\'Help dialog to be constructed.\')"><img alt="More Info" title="More Info" src="info.png" style="heigh:20px;width:20px;vertical-align:bottom;"></a></div> \
+                <div><a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '">Kanban</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="javascript:alert(\'Help dialog to be constructed.\')"><img alt="More Info" title="More Info" src="' + config.imgPath + 'info.png" style="heigh:20px;width:20px;vertical-align:bottom;"></a></div> \
             </div> \
         </div> \
     ';
@@ -124,12 +124,12 @@ function getCompletedFooterHtml(rapidboardId, startDate, targetDate) {
                     <div class="UdwPercentLabel">Revised Units</div> \
                 </div> \
                 <div class="PercentContainer ScopeChange"> \
-                    <div class="UdwPercentValue"><img src="ajax-loader.gif"></div> \
+                    <div class="UdwPercentValue"><img src="' + config.imgPath + 'ajax-loader.gif"></div> \
                     <div class="UdwPercentLabel">Scope Change</div> \
                 </div> \
             </div> \
             <div class="UdwNavContainer"> \
-                <div><a target="_blank" href="http://jira/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=controlChart&from=' + startDate + '&to=' + targetDate + '">Control</a> | <a target="_blank" href="http://jira/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="http://jira/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="javascript:alert(\'Help dialog to be constructed.\')"><img alt="More Info" title="More Info" src="info.png" style="heigh:20px;width:20px;vertical-align:bottom;"></a></div> \
+                <div><a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=controlChart&from=' + startDate + '&to=' + targetDate + '">Control</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="javascript:alert(\'Help dialog to be constructed.\')"><img alt="More Info" title="More Info" src="' + config.imgPath + 'info.png" style="heigh:20px;width:20px;vertical-align:bottom;"></a></div> \
             </div> \
         </div> \
     ';

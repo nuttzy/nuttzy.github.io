@@ -188,14 +188,17 @@ div.UdwNavContainer div.info {
 
 div.ui-dialog div.ui-dialog-titlebar span#ui-id-1.ui-dialog-title {
     font-size: .9em;
+    color: white;
 }
 
 #dialog-confirm {
     font-size: .7em;
+    color: white;
 }
 
 div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset {
     font-size: .7em;
+    color: white;
 }
 
 #dialog-confirm  span.ui-icon.ui-icon-circle-minus {

@@ -156,7 +156,8 @@ function populateCompletedHtml(divId, rapidboardId, startDate, targetDate) {
 }
 
 function bindDialog() {
-    $('div.UdwFooterContainer a.info').click(function() {
+    $('div.UdwFooterContainer a.info').click(function(event) {
+        event.preventDefault();
         $('#dialog-confirm').dialog('open');
     });
 }

@@ -8,7 +8,7 @@ div.UdwHeaderContainer {
     width: 100%;
 }
 
-div.UdwHeaderContainer  .DaysLeft {
+div.UdwHeaderContainer  .DurationElapsed {
     font-size: 20px;
     font-weight: bold;
     display: inline;
@@ -21,7 +21,7 @@ div.UdwHeaderContainer  .PointsPerWeek {
     margin-left: 5px;
 }
 
-div.UdwHeaderContainer  .Duration {
+div.UdwHeaderContainer  .DurationDates {
     float: right;
     display: inline;
     margin-right: 15px;
@@ -123,6 +123,12 @@ div.UdwFooterContainer {
     display: table;
 }
 
+div.UdwFooterContainer img.infoImage {
+    height:20px;
+    width:20px;
+    vertical-align:bottom;
+}
+
 
 /* **** progress percents **** */
 
@@ -173,7 +179,24 @@ div.UdwNavContainer div.info {
     background:#ffffff url("info.png") no-repeat right top;
     height:60px;
     width:60px;
-    /*
-    vertical-align:bottom;">
-    */
+}
+
+
+/* **** dialog **** */
+
+div.ui-dialog div.ui-dialog-titlebar span#ui-id-1.ui-dialog-title {
+    font-size: .9em;
+}
+
+#dialog-confirm {
+    font-size: .7em;
+}
+
+div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset {
+    font-size: .7em;
+}
+
+#dialog-confirm  span.ui-icon.ui-icon-circle-minus {
+    float:left;
+    margin:0 7px 5px 0;
 }

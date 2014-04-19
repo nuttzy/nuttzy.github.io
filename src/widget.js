@@ -1,11 +1,11 @@
 /*
 
 to do:
-* make URL host configurable
 * remove alerts, and replace with some error dialog - have option to fail silently
 * consider going OO and dumping the spaghetti code
 * unit tests never hurt anyone
 * perhaps a dictionary for at least sprint vs mvf language
+* document dependent libs (jquery, jqueryui, momentjs)
 
 */
 var config = {
@@ -14,6 +14,9 @@ var config = {
     "rapidBoardUrl" : "/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=RAPIDID&jsonp-callback=?",
     "burndownUrl"   : "/rest/greenhopper/1.0/rapid/charts/scopechangeburndownchart.json?rapidViewId=RAPIDID&sprintId=SPRINTID&jsonp-callback=?"
 }
+$(document).ready(function(){
+    initDialog();
+});
 
 function getActiveMvfStats( divId, rapidboardId) {
     $("#" + divId).html('<img src="' + config.imgPath + 'ajax-loader.gif"> Fetching stats from Jira...');
@@ -50,8 +53,10 @@ function getUrl(urlType, rapidboardId, sprintId) {
 function getHeaderHtml() {
     return '\
         <div class="UdwHeaderContainer"> \
-            <div><span class="DaysLeft">0 days left</span><span class="PointsPerWeek"></span></div> \
-            <div class="Duration"> \
+            <div class="DurationElapsed"> \
+                <span class="DaysLeft">0 days left</span><span class="PointsPerWeek"></span> \
+            </div> \
+            <div class="DurationDates"> \
                 <span class="DurationLabel">Start:</span><span class="DurationStart DurationValue">2014-01-01</span> <span class="DurationLabel TargetLabel">Target:</span><span class="DurationTarget DurationValue">2014-02-01</span> \
             </div> \
         </div> \
@@ -105,7 +110,7 @@ function getActiveFooterHtml(rapidboardId, startDate, targetDate) {
                 </div> \
             </div> \
             <div class="UdwNavContainer"> \
-                <div><a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '">Kanban</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="javascript:alert(\'Help dialog to be constructed.\')"><img alt="More Info" title="More Info" src="' + config.imgPath + 'info.png" style="heigh:20px;width:20px;vertical-align:bottom;"></a></div> \
+                <div><a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '">Kanban</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="#"><img class="infoImage" alt="More Info" title="More Info" src="' + config.imgPath + 'info.png"></a></div> \
             </div> \
         </div> \
     ';
@@ -129,7 +134,7 @@ function getCompletedFooterHtml(rapidboardId, startDate, targetDate) {
                 </div> \
             </div> \
             <div class="UdwNavContainer"> \
-                <div><a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=controlChart&from=' + startDate + '&to=' + targetDate + '">Control</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="javascript:alert(\'Help dialog to be constructed.\')"><img alt="More Info" title="More Info" src="' + config.imgPath + 'info.png" style="heigh:20px;width:20px;vertical-align:bottom;"></a></div> \
+                <div><a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=controlChart&from=' + startDate + '&to=' + targetDate + '">Control</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=burndownChart">Burndown</a> | <a target="_blank" href="' + config.jiraHost + '/secure/RapidBoard.jspa?rapidView=' + rapidboardId + '&view=reporting&chart=cumulativeFlowDiagram&from=' + startDate + '&to=' + targetDate + '">CFD</a> | <a class="info" href="#"><img class="infoImage" alt="More Info" title="More Info" src="' + config.imgPath + 'info.png"></a></div> \
             </div> \
         </div> \
     ';
@@ -137,6 +142,8 @@ function getCompletedFooterHtml(rapidboardId, startDate, targetDate) {
 
 function populateActiveHtml(divId, rapidboardId, sprintId, startDate, targetDate) {
     $("#" + divId + "").html( getHeaderHtml() + getProgressBarHtml(sprintId) +  getActiveFooterHtml(rapidboardId, startDate, targetDate) );
+
+    bindDialog() ;
 }
 
 function populateCompletedHtml(divId, rapidboardId, startDate, targetDate) {
@@ -144,6 +151,87 @@ function populateCompletedHtml(divId, rapidboardId, startDate, targetDate) {
     
     var weeksToComplete = Math.round(moment(targetDate).diff(moment(startDate),'days')/7*10)/10;
     $("#" + divId + " div.UdwHeaderContainer span.DaysLeft").html( weeksToComplete + ' weeks to complete');
+
+    bindDialog() ;
+}
+
+function bindDialog() {
+    $('div.UdwFooterContainer a.info').click(function() {
+        $('#dialog-confirm').dialog('open');
+    });
+}
+
+function initDialog() {
+    $('<div id="dialog-confirm"></div>').appendTo('body');
+    
+    $("#dialog-confirm").attr("title","Statistics Explained");
+    $("#dialog-confirm").html('\
+        <h3>Header</h3> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Days Left:</strong> The number of days remaining, including weekends. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Story Units per Week:</strong> To the right of the days left, the number of story units moved to Release Ready divided by the number of weeks elapsed.  \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Weeks to Complete:</strong> (completed MVFs only) The number of weeks elapsed to complete the MVF.  There is no allowance made for holidays or time-off. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Start:</strong> The day the MVF began as determined by clicking the "Start Sprint" button on the planning page. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>End/Target Date:</strong> The date the MVF will (or did) complete.  This value can be adjusted on the MVFs Kanban page. \
+        </p> \
+        <h3>Progress Bar</h3> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            For an active MVF, the four Lean columns of Analysis Complete, Implementation, Verification, and Release Ready are represented.  The bars grow proportionally \
+            to the number of story units in each column.  If a column currently contains no stories, it will not be drawn on the progress tracker.  The number of story \
+            units is displayed for each column.  Clicking the progress bar will open a list of stories and subtaks currently assigned to that column. \
+        </p> \
+        <h3>Footer</h3> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Time Elapsed:</strong> Percentage of days gone by, including weekend days, of the MVF duration. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Work Complete:</strong> The percentage of story units moved to Release Ready. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Scope Change:</strong> The planned number of story points at the MVF start is determined.  It is the subtracted from the final total of story units remaining \
+            in the sprint.  Lastly, the difference is divided by the original planned number to yield a percentage.  A negative percentage indicates that the net scope of \
+            the MVF has descreased since the originally planned value. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Planned Units:</strong> (completed MVFs only) The number of story units that were originally planned at the start of the MVF. \
+        </p> \
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <strong>Revised Units:</strong> (completed MVFs only) The final number of story units that were completed in the MVF. \
+        </p>'
+    );
+
+    $(function() {
+        $( "#dialog-confirm" ).dialog({
+            height:450,
+            width:600,
+            modal: true,
+            autoOpen: false,
+            buttons: {
+                Ok: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    });
 }
 
 function handleClosedSprint(divId) {

@@ -191,12 +191,17 @@ div.ui-dialog div.ui-dialog-titlebar span#ui-id-1.ui-dialog-title {
     color: white;
 }
 
-#dialog-confirm {
+#dialog-confirm,
+#dialog-confirm p {
     font-size: .7em;
     color: white;
 }
 
-div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset {
+#dialog-confirm h3 {
+    color: white;
+}
+
+div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset p {
     font-size: .7em;
     color: white;
 }

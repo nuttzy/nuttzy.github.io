@@ -50,8 +50,7 @@ function getUrl(urlType, rapidboardId, sprintId) {
     return config.jiraHost + url ;
 }
 
-function getHeaderHtml(divId) {
-    $("#" + divId + "").css("width:600px;");
+function getHeaderHtml() {
     return '\
         <div class="UdwHeaderContainer"> \
             <div class="DurationElapsed"> \
@@ -142,13 +141,13 @@ function getCompletedFooterHtml(rapidboardId, startDate, targetDate) {
 }
 
 function populateActiveHtml(divId, rapidboardId, sprintId, startDate, targetDate) {
-    $("#" + divId + "").html( getHeaderHtml(divId) + getProgressBarHtml(sprintId) +  getActiveFooterHtml(rapidboardId, startDate, targetDate) );
+    $("#" + divId + "").html( getHeaderHtml() + getProgressBarHtml(sprintId) +  getActiveFooterHtml(rapidboardId, startDate, targetDate) );
 
     bindDialog() ;
 }
 
 function populateCompletedHtml(divId, rapidboardId, startDate, targetDate) {
-    $("#" + divId + "").html( getHeaderHtml(divId) + '<br/>' +  getCompletedFooterHtml(rapidboardId, startDate, targetDate) );
+    $("#" + divId + "").html( getHeaderHtml() + '<br/>' +  getCompletedFooterHtml(rapidboardId, startDate, targetDate) );
     
     var weeksToComplete = Math.round(moment(targetDate).diff(moment(startDate),'days')/7*10)/10;
     $("#" + divId + " div.UdwHeaderContainer span.DaysLeft").html( weeksToComplete + ' weeks to complete');

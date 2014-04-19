@@ -121,6 +121,7 @@ li.UdwProgress.ReleaseReady a {
 div.UdwFooterContainer {
     width: 100%;
     display: table;
+    margin-top:10px;
 }
 
 div.UdwFooterContainer img.infoImage {
@@ -154,9 +155,10 @@ div.UdwPercentUpdatesContainer .PercentContainer div.UdwPercentValue {
     color: #333;
 }
 
-div.UdwStatsContainer div.UdwPercentValue {
+div.UdwFooterContainer div.UdwPercentUpdatesContainer div.PercentContainer div.UdwPercentValue {
     font-size: 28.8px;
     font-weight: bold;
+    margin-bottom: 3px;
 }
 
 div.UdwStatsContainer div.UdwPercentLabel {

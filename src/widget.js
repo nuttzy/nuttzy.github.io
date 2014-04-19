@@ -33,9 +33,9 @@ function getCompletedMvfStats( divId, rapidboardId, sprintId) {
         var targetDate = moment(results.completeTime).format('20YY-MM-DD');
         populateCompletedHtml(divId, rapidboardId, startDate, targetDate);
         processBurndownData(results, divId, rapidboardId, sprintId);
-        $("#" + divId + " div.UdwHeaderContainer div.Duration span.DurationStart").html(startDate);
-        $("#" + divId + " div.UdwHeaderContainer div.Duration span.DurationTarget").html(targetDate);
-        $("#" + divId + " div.UdwHeaderContainer div.Duration span.TargetLabel").html("End");
+        $("#" + divId + " div.UdwHeaderContainer div.DurationDates span.DurationStart").html(startDate);
+        $("#" + divId + " div.UdwHeaderContainer div.DurationDates span.DurationTarget").html(targetDate);
+        $("#" + divId + " div.UdwHeaderContainer div.DurationDates span.TargetLabel").html("End");
         
     });    
 }
@@ -51,6 +51,7 @@ function getUrl(urlType, rapidboardId, sprintId) {
 }
 
 function getHeaderHtml() {
+    $("#" + divId + "").css("width:600px;");
     return '\
         <div class="UdwHeaderContainer"> \
             <div class="DurationElapsed"> \
@@ -294,8 +295,8 @@ default: alert("wtf");
     }
     $("#" + divId + " div.UdwFooterContainer div.WorkComplete div.UdwPercentValue").html(Math.round(pointsReleaseReady/totalPoints*100) + "%");            
 
-    $("#" + divId + " div.UdwHeaderContainer div.Duration span.DurationStart").html(startDate);
-    $("#" + divId + " div.UdwHeaderContainer div.Duration span.DurationTarget").html(targetDate);
+    $("#" + divId + " div.UdwHeaderContainer div.DurationDates span.DurationStart").html(startDate);
+    $("#" + divId + " div.UdwHeaderContainer div.DurationDates span.DurationTarget").html(targetDate);
     $("#" + divId + " div.UdwHeaderContainer span.DaysLeft").html(
         moment(targetDate).diff(moment(),'days') + " days left"
      );

@@ -1,0 +1,222 @@
+div.UdwStatsContainer {
+    width: 700px;
+}
+
+/* **** header **** */
+
+div.UdwHeaderContainer {
+    width: 100%;
+}
+
+div.UdwHeaderContainer  .DurationElapsed {
+    font-size: 20px;
+    font-weight: bold;
+    display: inline;
+    margin-left: 15px;
+}
+
+div.UdwHeaderContainer span.DaysLeft.overdue {
+    color: red;
+}
+
+div.UdwHeaderContainer  .PointsPerWeek {
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+div.UdwHeaderContainer  .DurationDates {
+    float: right;
+    display: inline;
+    margin-right: 15px;
+}
+
+div.UdwHeaderContainer .DurationLabel {
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+div.UdwHeaderContainer .DurationValue {
+    padding-left: 5px;
+}
+
+
+
+/* **** progress bar **** */
+
+.UdwColumnProgressContainer {
+    display: block;
+    margin: 0;
+    padding: 0;
+    clear: both;
+}
+
+.UdwColumnProgress {
+    height: 30px;
+    width: 100%;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+UdwColumnProgress ul {
+    list-style: none;
+    display:block;
+}
+
+.UdwColumnProgress>li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    color: blue;
+    display: inline-block;
+    height: inherit;
+    overflow: hidden;
+
+    border: 0;
+    float: left;
+}
+
+.UdwColumnProgress>li  a{
+    position: relative;
+    text-align: left;
+    display: inline-block;
+    height: inherit;
+    width: 100%;
+    text-decoration: none;
+    color: white; 
+}
+
+li.UdwProgress.AnalysisComplete a {
+    background: #4a6785;
+    margin: 0;
+    padding: 0;
+}
+
+li.UdwProgress.Implementation a{
+    background: #8080ff;
+    margin: 0;
+    padding: 0;
+}
+
+li.UdwProgress.Verification a {
+    background: #ffd351;
+    color: #815b3a;
+    margin: 0;
+    padding: 0;
+}
+
+li.UdwProgress.ReleaseReady a {
+    background: #14892c;
+    margin: 0;
+    padding: 0;
+}
+
+.UdwColumnProgress .UdwProgressStatusInfo b {
+    margin: 0;
+    padding: 0 0 0 3px;
+}
+
+
+
+/* **** footer **** */
+
+div.UdwFooterContainer {
+    width: 100%;
+    display: table;
+    margin-top:10px;
+}
+
+div.UdwFooterContainer img.infoImage {
+    height:20px;
+    width:20px;
+    vertical-align:bottom;
+}
+
+
+/* **** progress percents **** */
+
+div.UdwPercentUpdatesContainer {
+/*
+    display: table-cell;
+    */
+    display: inline;
+    width: 60%;
+    border-spacing: 5px;
+}
+
+div.UdwPercentUpdatesContainer .PercentContainer {
+    display: table-cell;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 20px;
+}
+
+div.UdwPercentUpdatesContainer .PercentContainer div.UdwPercentValue {
+    text-decoration: none;
+    text-align: center;
+    color: #333;
+}
+
+div.UdwFooterContainer div.UdwPercentUpdatesContainer div.PercentContainer div.UdwPercentValue {
+    font-size: 28.8px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+div.UdwStatsContainer div.UdwPercentLabel {
+    font-size: 14px;
+}
+
+
+/* **** navigation links **** */
+
+div.UdwNavContainer {
+    display: table-cell;
+    width: 40%;
+    text-align: right;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    vertical-align: bottom;
+}
+
+div.UdwNavContainer div.info {
+    background:#ffffff url("info.png") no-repeat right top;
+    height:60px;
+    width:60px;
+}
+
+
+/* **** dialog **** */
+
+div.ui-dialog div.ui-dialog-titlebar span.ui-dialog-title {
+    font-size: 18px;
+    color: white;
+}
+
+#dialog-mvf-health-tracker-help,
+#dialog-mvf-health-tracker-help p,
+#dialog-mvf-health-tracker-error,
+#dialog-mvf-health-tracker-error p {
+    font-size: 12px;
+    color: white;
+}
+
+#dialog-mvf-health-tracker-help h3,
+#dialog-mvf-health-tracker-error h3 {
+    color: white;
+}
+
+/*
+div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset p {
+    font-size: .7em;
+    color: red;
+}
+*/
+
+#dialog-mvf-health-tracker-help  span.ui-icon.ui-icon-circle-minus,
+#dialog-mvf-health-tracker-error  span.ui-icon.ui-icon-circle-minus {
+    float:left;
+    margin:0 7px 5px 0;
+}

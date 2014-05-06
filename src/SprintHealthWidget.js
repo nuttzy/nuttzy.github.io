@@ -162,6 +162,7 @@ SprintHealthWidget.prototype.processBurndownData = function(result) {
     var stories = [] ;
     var keys = [] ;
     var delta = 0;
+    var self = this;
     AJS.$.each(result.changes, function(changeTime, field){
         // determine scope start
         if (typeof field[0].statC != 'undefined' && typeof field[0].statC.newValue != 'undefined' && changeTime <= startTime) {
@@ -190,7 +191,7 @@ SprintHealthWidget.prototype.processBurndownData = function(result) {
                 endScope = endScope + delta ;                        
                 stories[keys.indexOf(field[0].key)].points = field[0].statC.newValue;            
             } else {
-                this.handleErrorMessage("processBurndownData - unexecpted condition for " + field[0].key);
+                self.handleErrorMessage("processBurndownData - unexecpted condition for " + field[0].key);
             }
         // handle case of removing story from sprint
         } else if (typeof field[0].added != 'undefined' && field[0].added === false) {
@@ -220,6 +221,7 @@ SprintHealthWidget.prototype.processBurndownData = function(result) {
     }
     
     var startDate = moment(result.startTime).format('20YY-MM-DD');
+    // note: if the MVF has not completed yet, then result.completeTime is undefined and moment() will act on the current time
     var targetDate = moment(result.completeTime).format('20YY-MM-DD');
     var weeksToComplete = Math.round(moment(targetDate).diff(moment(startDate),'days')/7*10)/10;
     var perWeek = Math.round(endScope / weeksToComplete * 10)/10 ;
@@ -460,7 +462,7 @@ SprintHealthDialogFactory.prototype.create = function() {
 
     var self = this;
     try {
-        AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
+        AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog( dialogConfig);});
     // jQuery UI 1.8.17 has a bug preventing dialog buttons from working.  I should detect if the error condition is present and retry
     } catch(err) {
         dialogConfig.buttons = {} ;

@@ -118,6 +118,7 @@ ScopeChangeWidget.prototype.processBurndownData = function(result) {
             }
         // tally completed items
         } else if (changeTime >= startTime && typeof field[0].column != 'undefined' && (field[0].column.notDone == false && field[0].column.done == true)) {
+//CN - throwing an error on Chandima's sprint b/c it doesn't have this key yet somehow
             completedPoints += stories[keys.indexOf(field[0].key)].points;
         }
         
@@ -144,7 +145,7 @@ ScopeChangeWidget.prototype.processBurndownData = function(result) {
 
 //CN fix div id
 //CN can we have the table extracted elsewhere so we don't have markup here?
-    AJS.$("#mvf192b div.scopeChangeLedger").html('<table style="width:100%;">' + tableHtml + '</table>');
+    AJS.$("#" + this.divId + " div.scopeChangeLedger").html('<table style="width:100%;">' + tableHtml + '</table>');
 
     var self = this;
     var key = '';

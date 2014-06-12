@@ -107,14 +107,17 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
             switch (field.statusName) {
             case "Open":
             case "Reopened":
+            case "Design":
                 pointsAnalysis = pointsAnalysis + field.estimateStatistic.statFieldValue.value;
                 break;
             case "In Progress":
             case "Implementation Parking Lot":
+            case "Implementation Complete":
                 pointsImplementation = pointsImplementation + field.estimateStatistic.statFieldValue.value;
                 break;
             case "Verification":
             case "Verification Parking Lot":
+            case "Verification Complete":
                 pointsVerification = pointsVerification + field.estimateStatistic.statFieldValue.value;
                 break;
             case "Resolved":

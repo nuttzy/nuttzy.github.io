@@ -11,7 +11,7 @@ DONE!
 */
 
 SprintHealthWidget.config = {
-    "widgetEnabled": true,
+    "widgetEnabled": false,
     "oauthHost":"http://dvbgammonvm01:8008",
     "jiraHost":"http://jira",
     "imgPath":"https://nuttzy.github.io/content/images/",

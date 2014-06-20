@@ -5,16 +5,20 @@ to do:
 * perhaps a dictionary for at least sprint vs mvf language
 * document dependent libs (jquery, jqueryui, momentjs)
 
+DONE!
 * note that the script doesn't deal with any auth other than a wide-open privs (fine for private VPN)
 
 */
 
 SprintHealthWidget.config = {
+    "widgetEnabled": true,
+    "oauthHost":"http://dvbgammonvm01:8008",
     "jiraHost":"http://jira",
     "imgPath":"https://nuttzy.github.io/content/images/",
     "jsErrorsToDialog": false,
-    "rapidBoardUrl" : "/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=RAPIDID&jsonp-callback=?",
-    "burndownUrl"   : "/rest/greenhopper/1.0/rapid/charts/scopechangeburndownchart.json?rapidViewId=RAPIDID&sprintId=SPRINTID&jsonp-callback=?"
+    "treLaLaCompatiabilityMode": false,
+    "rapidBoardUrl" : "/projects/JiraOAuth/web/rapidboard?jsonp-callback=?&rapidboardId=RAPIDID",
+    "burndownUrl"   : "/projects/JiraOAuth/web/burndown?jsonp-callback=?&rapidboardId=RAPIDID&sprintId=SPRINTID"
 }
 
 
@@ -33,12 +37,18 @@ function SprintHealthWidget( divId, rapidboardId, sprintId) {
 }
 
 
-var sprintHealthTreLaLaCompatiabilityMode = false;
-
 var sprintHealthWidgetIsBootStrapped = false;
+var sprintHealthCheckedOAuthConnection = false ;
+
 var sprintHealthErrorDialog = null;
 var sprintHealthHelpDialog = null;
+var sprintHealthOAuthDialog = null;
 function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
+    if (SprintHealthWidget.config.widgetEnabled != true) {
+        AJS.$("#" + divId).html("* The MVF Status tool is currently offline.");
+        return ;
+    }
+
     // only want to do these things once per page load
     if (!sprintHealthWidgetIsBootStrapped) {
         sprintHealthWidgetIsBootStrapped = true;
@@ -49,11 +59,54 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
         sprintHealthErrorDialog.create();
         sprintHealthHelpDialog = new SprintHealthDialogFactory('help');
         sprintHealthHelpDialog.create();
+        sprintHealthOAuthDialog = new SprintHealthDialogFactory('oauth');
+        sprintHealthOAuthDialog.create();
     }
 
     var sprintHealthWidget = new SprintHealthWidget(divId, rapidboardId, sprintId);
     sprintHealthWidget.markup = new SprintHealthMarkup(sprintId, rapidboardId);
-    sprintHealthWidget.getMvfStats();
+
+//CN - this is not a great system.  Should have a polling mechanism so that no mvfstats are fired until the connection has been 
+//      established and only one attempt is made at establishing the connection
+    if (sprintHealthCheckedOAuthConnection) {
+        sprintHealthWidget.getMvfStats();
+    } else {
+        sprintHealthWidget.establishOAuthConnection();
+    }
+}
+
+SprintHealthWidget.prototype.establishOAuthConnection = function() {
+    var self = this;
+    // after a 5 second delay, reveal a link where they can reset their session if things are not loading
+    AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
+    AJS.$("span.oauthreauth").hide();
+    AJS.$("span.oauthreauth").delay(5000).show(0);
+    AJS.$('a.oauthreset').click(function(event) {
+        event.preventDefault();
+        self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/resetandconnect');
+    });
+
+    // see if we can do a simple pull, meaning the user is authorized already
+    AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
+        sprintHealthCheckedOAuthConnection = true;
+//CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
+        self.getMvfStats();
+    })
+    // not authorized, so open dialog that will show them to the promised land
+    .error(function(parsedResponse,statusText,jqXhr) {
+        self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+    });
+}
+
+SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
+    var self = this;
+    AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
+    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
+    if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
+        $('#dialog-mvf-health-tracker-oauth').dialog('open');
+    } else {
+        AJS.$('#dialog-mvf-health-tracker-oauth').dialog('open');
+    }
 }
 
 SprintHealthWidget.prototype.getMvfStats = function() {
@@ -88,9 +141,10 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
         return false;
     }
     this.sprintId = result.sprintsData.sprints[0].id;
+//CN - accommodate different date formats? 
     this.startTime = new SprintHealthDate(result.sprintsData.sprints[0].startDate);
     this.endTime = new SprintHealthDate(result.sprintsData.sprints[0].endDate);
-
+    
     this.addMarkup('active');
     var self = this;
     AJS.$.getJSON(self.getUrl('burndownUrl'), function(results) {
@@ -104,7 +158,7 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
     var totalPoints = 0 ;
     AJS.$.each(result.issuesData.issues, function(i, field){
         if (field.typeName == "Story") {
-            switch (field.statusName) {
+        switch (field.statusName) {
             case "Open":
             case "Reopened":
             case "Design":
@@ -287,7 +341,7 @@ SprintHealthWidget.prototype.getUrl = function(urlType) {
     }
     url = url.replace("RAPIDID", this.rapidboardId) ;
     url = url.replace("SPRINTID", this.sprintId) ;
-    return SprintHealthWidget.config.jiraHost + url ;
+    return SprintHealthWidget.config.oauthHost + url ;
 }
 
 // used in bootstrap before SprintHealthWidget is created
@@ -441,6 +495,10 @@ SprintHealthDialogFactory.prototype.create = function() {
         this.dialogContents = getHelpDialogMarkup();
         this.height = 450;
         this.width = 600;
+    } else if (this.dialogDivId == 'dialog-mvf-health-tracker-oauth') {
+        this.title = 'Authorize Jira Access';
+        this.dialogContents = getOAuthDialogMarkup();
+        this.width = 650;
     } else {
         this.title = 'Error';
         this.dialogContents = getErrorDialogMarkup();
@@ -458,19 +516,24 @@ SprintHealthDialogFactory.prototype.create = function() {
         autoOpen: false,
         buttons: {
             Ok: function(event) {
-                $( this ).dialog( "close" );
+                AJS.$( this ).dialog( "close" );
             }
         }
     };
 
     var self = this;
-    try {
-//        AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog( dialogConfig);});
-        AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
-    // jQuery UI 1.8.17 has a bug preventing dialog buttons from working.  I should detect if the error condition is present and retry
-    } catch(err) {
-        dialogConfig.buttons = {} ;
-        AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog(dialogConfig);});
+    if (this.dialogDivId == 'dialog-mvf-health-tracker-help') {
+        try {
+//CN - caused breakage on production!!!
+            AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog( dialogConfig);});
+//            AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
+        // jQuery UI 1.8.17 has a bug preventing dialog buttons from working.  I should detect if the error condition is present and retry
+        } catch(err) {
+            dialogConfig.buttons = {} ;
+            AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog(dialogConfig);});
+        }
+    } else {
+        AJS.$('#' + this.dialogDivId).dialog( dialogConfig);
     }
 }
 
@@ -479,7 +542,7 @@ SprintHealthDialogFactory.prototype.bind = function(selector) {
     AJS.$(selector).click(function(event) {
         event.preventDefault();
 //CN - not sure why there's a conflict when tre-la-la is present, but this fixes it
-        if (sprintHealthTreLaLaCompatiabilityMode) {
+        if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
             $('#' + self.dialogDivId).dialog('open');
         } else {
             AJS.$('#' + self.dialogDivId).dialog('open');
@@ -492,6 +555,14 @@ function getErrorDialogMarkup() {
         <p> \
             <span class="ui-icon ui-icon-circle-minus"></span> \
             <span class="error-content">Now you have gone and done it</span> \
+        </p>';
+}
+
+function getOAuthDialogMarkup() {
+    return '\
+        <p> \
+            <span class="ui-icon ui-icon-circle-minus"></span> \
+            <span class="oauth-content">OAuth</span> \
         </p>';
 }
 

@@ -87,15 +87,19 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
     });
 
     // see if we can do a simple pull, meaning the user is authorized already
-    AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
-        sprintHealthCheckedOAuthConnection = true;
-//CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
-        self.getMvfStats();
-    })
-    // not authorized, so open dialog that will show them to the promised land
-    .error(function(parsedResponse,statusText,jqXhr) {
-        self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
-    });
+    try {
+        AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
+            sprintHealthCheckedOAuthConnection = true;
+    //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
+            self.getMvfStats();
+        })
+        // not authorized, so open dialog that will show them to the promised land
+        .error(function(parsedResponse,statusText,jqXhr) {
+            self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+        });
+    } catch(err) {
+alert('caught and failed');
+    }
 }
 
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {

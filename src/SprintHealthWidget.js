@@ -530,8 +530,8 @@ SprintHealthDialogFactory.prototype.create = function() {
     if (this.dialogDivId == 'dialog-mvf-health-tracker-help') {
         try {
 //CN - caused breakage on production!!!
-            AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog( dialogConfig);});
-//            AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
+//            AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog( dialogConfig);});
+            AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
         // jQuery UI 1.8.17 has a bug preventing dialog buttons from working.  I should detect if the error condition is present and retry
         } catch(err) {
             dialogConfig.buttons = {} ;

@@ -76,7 +76,6 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
 }
 
 SprintHealthWidget.prototype.establishOAuthConnection = function() {
-alert('1');
     var self = this;
     // after a 5 second delay, reveal a link where they can reset their session if things are not loading
     AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
@@ -86,21 +85,17 @@ alert('1');
         event.preventDefault();
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/resetandconnect');
     });
-alert('2');
 
     // see if we can do a simple pull, meaning the user is authorized already
     AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
-alert('3');
         sprintHealthCheckedOAuthConnection = true;
 //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
         self.getMvfStats();
     })
     // not authorized, so open dialog that will show them to the promised land
     .error(function(parsedResponse,statusText,jqXhr) {
-alert('4');
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
     });
-alert('5');
 }
 
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
@@ -538,15 +533,12 @@ SprintHealthDialogFactory.prototype.create = function() {
             AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog(dialogConfig);});
         }
     } else {
-alert('aa');
         try {
             AJS.$('#' + this.dialogDivId).dialog( dialogConfig);
         } catch(err) {
-alert('catch');
             dialogConfig.buttons = {} ;
             AJS.$('#' + this.dialogDivId).dialog( dialogConfig);
         }
-alert('bb');
     }
 }
 

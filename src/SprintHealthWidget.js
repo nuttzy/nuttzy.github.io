@@ -87,7 +87,7 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
     });
 
     // see if we can do a simple pull, meaning the user is authorized already
-    try {
+//    try {
         AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
             sprintHealthCheckedOAuthConnection = true;
     //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
@@ -97,9 +97,9 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
         .error(function(parsedResponse,statusText,jqXhr) {
             self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
-    } catch(err) {
-alert('caught and failed');
-    }
+//    } catch(err) {
+//alert('caught and failed');
+//    }
 }
 
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {

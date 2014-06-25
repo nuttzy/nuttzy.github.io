@@ -101,7 +101,8 @@ alert('in error');
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
     } catch(err) {
-alert('derp');
+alert(err.toSource());
+this.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
     }
 }
 

@@ -93,13 +93,15 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
 //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
             self.getMvfStats();
         })
-//CN this never gets called in production since errors always go to the catch
+//CN this never gets called in production since errors always go to the catch - ah, because .error was introduced in 1.5 and removed in 1.8, wiki is running 1.4.2
+/*
         // not authorized, so open dialog that will show them to the promised land
         .error(function(parsedResponse,statusText,jqXhr) {
             self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
+*/
     } catch(err) {
-//CN - why does a successful getJSON call also end up in here?
+//CN - why does a successful getJSON call also end up in here? - most likely due to the wiki using jQuery 1.4.2
         // on production, there is some weird situation where even a successful connection check will fail.  But if we delay 5 secs for the 
         //  connection check to finish, we can know if it's okay to skip authorizing again.
         var self = this;
@@ -117,11 +119,12 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
 
     var self = this;
     AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
+//CN - this is failing b/c the wiki is running 1.4.2 and "on" is a 1.7 feature
     try {
         AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
     } catch(err) {
 alert( "You are running jQuery version: " + AJS.$.fn.jquery );
-        alert('close failed: ' + err.toSource()) ;
+        AJS.$('#dialog-mvf-health-tracker-oauth').delegate( function( event, ui ) { self.getMvfStats();}, "dialogclose" );
     }
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');

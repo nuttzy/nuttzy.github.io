@@ -69,18 +69,9 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
 //CN - this is not a great system.  Should have a polling mechanism so that no mvfstats are fired until the connection has been 
 //      established and only one attempt is made at establishing the connection
     if (sprintHealthCheckedOAuthConnection) {
-alert('1');
         sprintHealthWidget.getMvfStats();
     } else {
-    
-    
-//what if we do a 5 sec wait here instead??    
-        setTimeout(function() {
-            sprintHealthWidget.establishOAuthConnection();
-        }, 5000);
-    
-    
-//        sprintHealthWidget.establishOAuthConnection();
+        sprintHealthWidget.establishOAuthConnection();
     }
 }
 
@@ -102,14 +93,13 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
 //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
             self.getMvfStats();
         })
+//CN this never gets called in production since errors always go to the catch
         // not authorized, so open dialog that will show them to the promised land
         .error(function(parsedResponse,statusText,jqXhr) {
-alert('in error');
-        self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+            self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
     } catch(err) {
 //CN - why does a successful getJSON call also end up in here?
-alert('err');
         // on production, there is some weird situation where even a successful connection check will fail.  But if we delay 5 secs for the 
         //  connection check to finish, we can know if it's okay to skip authorizing again.
         var self = this;

@@ -69,6 +69,7 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
 //CN - this is not a great system.  Should have a polling mechanism so that no mvfstats are fired until the connection has been 
 //      established and only one attempt is made at establishing the connection
     if (sprintHealthCheckedOAuthConnection) {
+alert('1');
         sprintHealthWidget.getMvfStats();
     } else {
         sprintHealthWidget.establishOAuthConnection();
@@ -91,6 +92,7 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
         AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
             sprintHealthCheckedOAuthConnection = true;
     //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
+alert('2');
             self.getMvfStats();
         })
         // not authorized, so open dialog that will show them to the promised land
@@ -98,14 +100,18 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
             self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
     } catch(err) {
-        self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+alert('derp');
     }
 }
 
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
     var self = this;
     AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
-    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
+    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { 
+    
+alert('3');
+    
+    self.getMvfStats();} );
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');
     } else {

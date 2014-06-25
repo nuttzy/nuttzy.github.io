@@ -120,6 +120,7 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
     try {
         AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
     } catch(err) {
+alert( "You are running jQuery version: " + AJS.$.fn.jquery );
         alert('close failed: ' + err.toSource()) ;
     }
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {

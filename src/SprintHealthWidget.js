@@ -75,9 +75,12 @@ alert('1');
     
     
 //what if we do a 5 sec wait here instead??    
+        setTimeout(function() {
+            sprintHealthWidget.establishOAuthConnection();
+        }, 5000);
     
     
-        sprintHealthWidget.establishOAuthConnection();
+//        sprintHealthWidget.establishOAuthConnection();
     }
 }
 
@@ -106,6 +109,7 @@ alert('in error');
         });
     } catch(err) {
 //CN - why does a successful getJSON call also end up in here?
+alert('err');
         // on production, there is some weird situation where even a successful connection check will fail.  But if we delay 5 secs for the 
         //  connection check to finish, we can know if it's okay to skip authorizing again.
         var self = this;

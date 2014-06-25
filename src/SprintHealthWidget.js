@@ -111,15 +111,17 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
 
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
     if (sprintHealthCheckedOAuthConnection) {
-alert('already checked');
         return;
     }
-alert('not successfully checked');
 
 
     var self = this;
     AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
-    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
+    try {
+        AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
+    } catch(err) {
+        alert('close failed: ' + err.toSource()) ;
+    }
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');
     } else {

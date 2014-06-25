@@ -123,8 +123,8 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
     try {
         AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
     } catch(err) {
-alert( "You are running jQuery version: " + AJS.$.fn.jquery );
-        AJS.$('#dialog-mvf-health-tracker-oauth').delegate( function( event, ui ) { self.getMvfStats();}, "dialogclose" );
+alert( "LEAVING OFF - Need a solution for prod wiki running jQuery version: " + AJS.$.fn.jquery );
+//        AJS.$('#dialog-mvf-health-tracker-oauth').delegate( function( event, ui ) { self.getMvfStats();}, "dialogclose" );
     }
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');

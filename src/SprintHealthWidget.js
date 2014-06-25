@@ -90,10 +90,10 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
     // see if we can do a simple pull, meaning the user is authorized already
     try {
         AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
-//            sprintHealthCheckedOAuthConnection = true;
+            sprintHealthCheckedOAuthConnection = true;
     //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
 alert('2');
-//            self.getMvfStats();
+            self.getMvfStats();
         })
         // not authorized, so open dialog that will show them to the promised land
         .error(function(parsedResponse,statusText,jqXhr) {
@@ -101,17 +101,23 @@ alert('in error');
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
     } catch(err) {
-        if (err instanceof TypeError){
-alert('type error');
-this.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
-        } else {
-        //handle the error
+        AJS.$("span.oauthreauth").delay(5000).show(0);
+
+        var self = this;
+        setTimeout(function() {
 alert(err.toSource());
-        }
+self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+        }, 5000);
     }
 }
 
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
+    if (sprintHealthCheckedOAuthConnection) {
+alert('already checked');
+        return;
+    }
+
+
     var self = this;
     AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {

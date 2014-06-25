@@ -114,12 +114,13 @@ alert(err.toSource());
 SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
     var self = this;
     AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
-    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');
     } else {
         AJS.$('#dialog-mvf-health-tracker-oauth').dialog('open');
     }
+//    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
+    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function() { self.getMvfStats();} );
 }
 
 SprintHealthWidget.prototype.getMvfStats = function() {

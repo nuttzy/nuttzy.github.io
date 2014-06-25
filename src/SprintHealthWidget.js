@@ -72,6 +72,11 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
 alert('1');
         sprintHealthWidget.getMvfStats();
     } else {
+    
+    
+//what if we do a 5 sec wait here instead??    
+    
+    
         sprintHealthWidget.establishOAuthConnection();
     }
 }
@@ -91,8 +96,7 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
     try {
         AJS.$.getJSON(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/priorities?jsonp-callback=?', function(results) {
             sprintHealthCheckedOAuthConnection = true;
-    //CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
-alert('2');
+//CN - when there are multiple widgets loading, they all seem to get kicked off on success. I kinda know why, but seems fragile
             self.getMvfStats();
         })
         // not authorized, so open dialog that will show them to the promised land
@@ -101,12 +105,12 @@ alert('in error');
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
     } catch(err) {
-        AJS.$("span.oauthreauth").delay(5000).show(0);
-
+//CN - why does a successful getJSON call also end up in here?
+        // on production, there is some weird situation where even a successful connection check will fail.  But if we delay 5 secs for the 
+        //  connection check to finish, we can know if it's okay to skip authorizing again.
         var self = this;
         setTimeout(function() {
-alert(err.toSource());
-self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+            self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         }, 5000);
     }
 }
@@ -116,17 +120,17 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
 alert('already checked');
         return;
     }
+alert('not successfully checked');
 
 
     var self = this;
     AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
+    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');
     } else {
         AJS.$('#dialog-mvf-health-tracker-oauth').dialog('open');
     }
-//    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
-    AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function() { self.getMvfStats();} );
 }
 
 SprintHealthWidget.prototype.getMvfStats = function() {

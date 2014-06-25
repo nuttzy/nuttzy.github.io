@@ -101,8 +101,13 @@ alert('in error');
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
         });
     } catch(err) {
-alert(err.toSource());
+        if (ex instanceof TypeError){
+alert('type error');
 this.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/connect');
+        } else {
+        //handle the error
+alert(err.toSource());
+        }
     }
 }
 

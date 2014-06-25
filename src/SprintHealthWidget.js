@@ -507,10 +507,12 @@ SprintHealthDialogFactory.prototype.create = function() {
         this.title = 'Authorize Jira Access';
         this.dialogContents = getOAuthDialogMarkup();
         this.width = 650;
+        this.height = 600;
     } else {
         this.title = 'Error';
         this.dialogContents = getErrorDialogMarkup();
         this.width = 300;
+        this.height = 450;
     }
 
     AJS.$('<div id="' + this.dialogDivId + '"></div>').appendTo('body');

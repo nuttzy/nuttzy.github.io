@@ -45,7 +45,7 @@ var sprintHealthHelpDialog = null;
 var sprintHealthOAuthDialog = null;
 function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
     if (SprintHealthWidget.config.widgetEnabled != true) {
-        AJS.$("#" + divId).html("* The MVF Status tool is currently offline.");
+        AJS.$("#" + divId).html("* The MVF Status tool is currently offline. View <a href=\"http://jira/secure/Dashboard.jspa?selectPageId=15463\" target=\"_blank\">MVF's in-flight</a>.");
         return ;
     }
 

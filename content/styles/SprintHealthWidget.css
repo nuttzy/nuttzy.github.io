@@ -229,3 +229,11 @@ span.oauthrefresh {
     color: white;
     padding: 5px;
 }
+
+span.oauthreauth {
+    border:3px solid #999900;
+    background-color: #FFFF00;
+    color: black;
+    padding: 5px;
+}
+

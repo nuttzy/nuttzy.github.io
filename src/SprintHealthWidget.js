@@ -78,7 +78,8 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
 SprintHealthWidget.prototype.establishOAuthConnection = function() {
     var self = this;
     // after a 5 second delay, reveal a link where they can reset their session if things are not loading
-    AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
+//    AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
+    AJS.$("#" + this.divId).html('<span class="oauthreauth">The MVF Health Widget is back! If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
     AJS.$("span.oauthreauth").hide();
     AJS.$("span.oauthreauth").delay(5000).show(0);
     AJS.$('a.oauthreset').click(function(event) {

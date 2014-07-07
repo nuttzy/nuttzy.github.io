@@ -591,7 +591,6 @@ function getErrorDialogMarkup() {
 function getOAuthDialogMarkup() {
     return '\
         <p> \
-            <span class="ui-icon ui-icon-circle-minus"></span> \
             <span class="oauth-content">OAuth</span> \
         </p>';
 }

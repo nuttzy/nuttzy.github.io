@@ -181,7 +181,8 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
     var pointsReleaseReady = 0;
     var totalPoints = 0 ;
     AJS.$.each(result.issuesData.issues, function(i, field){
-        if (field.typeName == "Story") {
+        if ((field.typeName == "Story") || (field.typeName == "Task") || (field.typeName == "Investigate") || (field.typeName == "Improvement") || 
+            (field.typeName == "Feature Request") || (field.typeName == "Bug")) {
             var points = (isNaN(parseInt(field.estimateStatistic.statFieldValue.value))) ? 0 : parseInt(field.estimateStatistic.statFieldValue.value);
             switch (field.statusName) {
             case "Open":
@@ -204,8 +205,6 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
                 pointsReleaseReady = pointsReleaseReady + points;
                 break;
             default:
-//cn this should have worked but didn't?
-self.handleErrorMessage("Unknown status name [" + field.statusName + "] encountered");
                 // if we don't know what it is, throw it into 'Analysis'
                 pointsAnalysis = pointsAnalysis + points;
             }

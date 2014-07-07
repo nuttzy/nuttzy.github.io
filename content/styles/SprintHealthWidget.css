@@ -195,6 +195,8 @@ div.ui-dialog div.ui-dialog-titlebar span.ui-dialog-title {
     color: white;
 }
 
+#dialog-mvf-health-tracker-oauth,
+#dialog-mvf-health-tracker-oauth p,
 #dialog-mvf-health-tracker-help,
 #dialog-mvf-health-tracker-help p,
 #dialog-mvf-health-tracker-error,
@@ -219,4 +221,10 @@ div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset p {
 #dialog-mvf-health-tracker-error  span.ui-icon.ui-icon-circle-minus {
     float:left;
     margin:0 7px 5px 0;
+}
+
+span.oauthrefresh {
+    border:1px solid #003319;
+    background-color: #00994C;
+    color: white;
 }

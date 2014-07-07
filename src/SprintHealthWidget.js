@@ -79,7 +79,6 @@ SprintHealthWidget.prototype.establishOAuthConnection = function() {
     var self = this;
     // after a 5 second delay, reveal a link where they can reset their session if things are not loading
     AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
-//    AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="' + SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/resetandconnect' + '" target="_blank">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
     AJS.$("span.oauthreauth").hide();
     AJS.$("span.oauthreauth").delay(5000).show(0);
     AJS.$('a.oauthreset').click(function(event) {
@@ -124,11 +123,7 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
     try {
         AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
     } catch(err) {
-//alert( "LEAVING OFF - Need a solution for prod wiki running jQuery version: " + AJS.$.fn.jquery );
-//        AJS.$('#dialog-mvf-health-tracker-oauth').delegate( function( event, ui ) { self.getMvfStats();}, "dialogclose" );
-//        AJS.$('#dialog-mvf-health-tracker-oauth').delegate('#dialog-mvf-health-tracker-oauth', 'dialogclose', function() { alert('3');self.getMvfStats();} );
-//        AJS.$('#dialog-mvf-health-tracker-oauth').delegate('div', 'close', function() { alert('3');self.getMvfStats();} );
-        AJS.$("#" + this.divId).html('<span class="oauthreauth">After authorizing, please refresh the page to see the MVF Health Widget.</span><br/>');
+        AJS.$("#" + this.divId).html('<span class="oauthrefresh">After authorizing, please refresh the page to see the MVF Health Widget.</span><br/>');
     }
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');

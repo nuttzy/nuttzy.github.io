@@ -591,19 +591,11 @@ function getErrorDialogMarkup() {
 function getOAuthDialogMarkup() {
     return '\
         <p> \
-            <span class="ui-icon ui-icon-circle-minus"><span class="oauth-content">OAuth</span></span> \
-        </p>';
-}
-//CN
-/*
-function getOAuthDialogMarkup() {
-    return '\
-        <p> \
             <span class="ui-icon ui-icon-circle-minus"></span> \
             <span class="oauth-content">OAuth</span> \
         </p>';
 }
-*/
+
 function getHelpDialogMarkup() {
     return '\
         <h3>Header</h3> \

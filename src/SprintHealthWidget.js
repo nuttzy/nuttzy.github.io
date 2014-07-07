@@ -563,8 +563,11 @@ SprintHealthDialogFactory.prototype.create = function() {
             AJS.$('#' + this.dialogDivId).dialog( dialogConfig);
         } catch(err) {
             dialogConfig.buttons = {} ;
-//            AJS.$('#' + this.dialogDivId).dialog( dialogConfig);
-            AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
+            if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
+                AJS.$(function() { $( '#' + self.dialogDivId).dialog( dialogConfig);});
+            } else {
+                AJS.$('#' + this.dialogDivId).dialog( dialogConfig);
+            }
         }
     }
 }

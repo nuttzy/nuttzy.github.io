@@ -204,7 +204,10 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
                 pointsReleaseReady = pointsReleaseReady + points;
                 break;
             default:
-                this.handleErrorMessage("Unknown status name [" + field.statusName + "] encountered");
+//cn this should have worked but didn't?
+self.handleErrorMessage("Unknown status name [" + field.statusName + "] encountered");
+                // if we don't know what it is, throw it into 'Analysis'
+                pointsAnalysis = pointsAnalysis + points;
             }
             
             totalPoints = totalPoints + points;

@@ -182,33 +182,32 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
     var totalPoints = 0 ;
     AJS.$.each(result.issuesData.issues, function(i, field){
         if (field.typeName == "Story") {
-        switch (field.statusName) {
+            var points = (isNaN(parseInt(field.estimateStatistic.statFieldValue.value))) ? 0 : parseInt(field.estimateStatistic.statFieldValue.value);
+            switch (field.statusName) {
             case "Open":
             case "Reopened":
             case "Design":
-                pointsAnalysis = pointsAnalysis + field.estimateStatistic.statFieldValue.value;
+                pointsAnalysis = pointsAnalysis + points;
                 break;
             case "In Progress":
             case "Implementation Parking Lot":
             case "Implementation Complete":
-                pointsImplementation = pointsImplementation + field.estimateStatistic.statFieldValue.value;
+                pointsImplementation = pointsImplementation + points;
                 break;
             case "Verification":
             case "Verification Parking Lot":
             case "Verification Complete":
-                pointsVerification = pointsVerification + field.estimateStatistic.statFieldValue.value;
+                pointsVerification = pointsVerification + points;
                 break;
             case "Resolved":
             case "Closed":
-                pointsReleaseReady = pointsReleaseReady + field.estimateStatistic.statFieldValue.value;
-if (parseInt(field.estimateStatistic.statFieldValue.value) != field.estimateStatistic.statFieldValue.value)
-alert('mismatch on [' + parseInt(field.estimateStatistic.statFieldValue.value) + '] [' + field.estimateStatistic.statFieldValue.value + ']');
+                pointsReleaseReady = pointsReleaseReady + points;
                 break;
             default:
                 this.handleErrorMessage("Unknown status name [" + field.statusName + "] encountered");
             }
             
-            totalPoints = totalPoints + field.estimateStatistic.statFieldValue.value;
+            totalPoints = totalPoints + points;
         }
     });
     AJS.$("#" + this.divId + " li.AnalysisComplete a b").html(pointsAnalysis);

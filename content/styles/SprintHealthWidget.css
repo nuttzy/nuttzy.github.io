@@ -224,7 +224,8 @@ div.ui-dialog div.ui-dialog-buttonpane div.ui-dialog-buttonset p {
 }
 
 span.oauthrefresh {
-    border:1px solid #003319;
+    border:3px solid #003319;
     background-color: #00994C;
     color: white;
+    padding: 5px;
 }

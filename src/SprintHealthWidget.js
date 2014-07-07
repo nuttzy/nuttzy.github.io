@@ -118,7 +118,7 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
 
 
     var self = this;
-    AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
+    AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health.  You might be asked to login first.</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
 //CN - this is failing b/c the wiki is running 1.4.2 and "on" is a 1.7 feature
     try {
         AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
@@ -591,11 +591,19 @@ function getErrorDialogMarkup() {
 function getOAuthDialogMarkup() {
     return '\
         <p> \
+            <span class="ui-icon ui-icon-circle-minus"><span class="oauth-content">OAuth</span></span> \
+        </p>';
+}
+//CN
+/*
+function getOAuthDialogMarkup() {
+    return '\
+        <p> \
             <span class="ui-icon ui-icon-circle-minus"></span> \
             <span class="oauth-content">OAuth</span> \
         </p>';
 }
-
+*/
 function getHelpDialogMarkup() {
     return '\
         <h3>Header</h3> \

@@ -201,6 +201,8 @@ SprintHealthWidget.prototype.processRapidboardData = function(result) {
             case "Resolved":
             case "Closed":
                 pointsReleaseReady = pointsReleaseReady + field.estimateStatistic.statFieldValue.value;
+if (parseInt(field.estimateStatistic.statFieldValue.value) != field.estimateStatistic.statFieldValue.value)
+alert('mismatch on [' + parseInt(field.estimateStatistic.statFieldValue.value) + '] [' + field.estimateStatistic.statFieldValue.value + ']');
                 break;
             default:
                 this.handleErrorMessage("Unknown status name [" + field.statusName + "] encountered");

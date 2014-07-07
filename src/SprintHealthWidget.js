@@ -548,7 +548,9 @@ SprintHealthDialogFactory.prototype.create = function() {
     };
 
     var self = this;
-    if (this.dialogDivId == 'dialog-mvf-health-tracker-help') {
+    if (this.dialogDivId == 'dialog-mvf-health-tracker-help' || this.dialogDivId == 'dialog-mvf-health-tracker-oauth') {
+//CN - can probably remove next line
+//    if (this.dialogDivId == 'dialog-mvf-health-tracker-help') {
         try {
 //CN - caused breakage on production!!!
 //            AJS.$(function() { AJS.$( '#' + self.dialogDivId).dialog( dialogConfig);});

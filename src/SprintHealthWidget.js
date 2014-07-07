@@ -128,7 +128,7 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
 //        AJS.$('#dialog-mvf-health-tracker-oauth').delegate( function( event, ui ) { self.getMvfStats();}, "dialogclose" );
 //        AJS.$('#dialog-mvf-health-tracker-oauth').delegate('#dialog-mvf-health-tracker-oauth', 'dialogclose', function() { alert('3');self.getMvfStats();} );
 //        AJS.$('#dialog-mvf-health-tracker-oauth').delegate('div', 'close', function() { alert('3');self.getMvfStats();} );
-        AJS.$("#" + this.divId).html('<span class="oauthreauth">After authorizing, click to <a class="oauthreset" href="javascript:self.getMvfStats();">load health widget</a> again.</span><br/>');
+        AJS.$("#" + this.divId).html('<span class="oauthreauth">After authorizing, please refresh the page to see the MVF Health Widget.</span><br/>');
     }
     if (SprintHealthWidget.config.treLaLaCompatiabilityMode) {
         $('#dialog-mvf-health-tracker-oauth').dialog('open');

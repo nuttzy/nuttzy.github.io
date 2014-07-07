@@ -523,7 +523,7 @@ SprintHealthDialogFactory.prototype.create = function() {
     } else if (this.dialogDivId == 'dialog-mvf-health-tracker-oauth') {
         this.title = 'Authorize Jira Access';
         this.dialogContents = getOAuthDialogMarkup();
-        this.width = 650;
+        this.width = 800;
         this.height = 650;
     } else {
         this.title = 'Error';

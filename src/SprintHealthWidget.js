@@ -78,16 +78,14 @@ function sprintHealthWidgetBootStrapper( divId, rapidboardId, sprintId) {
 SprintHealthWidget.prototype.establishOAuthConnection = function() {
     var self = this;
     // after a 5 second delay, reveal a link where they can reset their session if things are not loading
-//    AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
+    AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="#">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
     AJS.$("#" + this.divId).html('<span class="oauthreauth">If content fails to load, try to <a class="oauthreset" href="' + SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/resetandconnect' + '" target="_blank">authorize</a> again.</span><br/>' + this.markup.getWidgetLoader());
     AJS.$("span.oauthreauth").hide();
     AJS.$("span.oauthreauth").delay(5000).show(0);
-/*
     AJS.$('a.oauthreset').click(function(event) {
         event.preventDefault();
         self.setupOAuthDialog(SprintHealthWidget.config.oauthHost + '/projects/JiraOAuth/web/resetandconnect');
     });
-*/
 
     // see if we can do a simple pull, meaning the user is authorized already
     try {

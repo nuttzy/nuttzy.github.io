@@ -119,7 +119,7 @@ SprintHealthWidget.prototype.setupOAuthDialog = function( iframeSource) {
 
 
     var self = this;
-    AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health.  You might be asked to login first.</p><p><strong>IE Users:</strong> You have to log into <a href="http://jira.navinet.net" target="_blank">jira.navinet.net</a> (not just 'jira') in a new tab due to some IE-specific issue.</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
+    AJS.$("#dialog-mvf-health-tracker-oauth p span.oauth-content").html('<p>Please click <strong>Allow</strong> in the iframe below. Doing so will authorize secure Jira access to view MVF Health.  You might be asked to login first.</p><p><strong>IE Users:</strong> You have to log into <a href="http://jira.navinet.net" target="_blank">jira.navinet.net</a> (not just "jira") in a new tab due to some IE-specific issue.</p><iframe src="' + iframeSource + '" style="width:100%;height:450px;"></iframe>');
 //CN - this is failing b/c the wiki is running 1.4.2 and "on" is a 1.7 feature
     try {
         AJS.$('#dialog-mvf-health-tracker-oauth').on( "dialogclose", function( event, ui ) { self.getMvfStats();} );
